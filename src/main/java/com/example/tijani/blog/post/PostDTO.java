@@ -1,5 +1,6 @@
 package com.example.tijani.blog.post;
 
+import com.example.tijani.blog.category.CategoryDTO;
 import com.example.tijani.blog.tag.TagDTO;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,7 @@ public class PostDTO {
   private String slug;
   private String content;
   private List<TagDTO> tags;
+  private CategoryDTO category;
   private Date createdAt;
   private Date updatedAt;
 }

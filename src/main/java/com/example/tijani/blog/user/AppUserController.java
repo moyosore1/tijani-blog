@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@AllArgsConstructor
-@RestController
-@RequestMapping("api/v1/user")
-public class AppUserController {
-  private final AppUserService userService;
-
-  @PostMapping(path = "register")
-  public String registerUser(@RequestBody @Validated AppUser user){
-    return userService.signupUser(user);
-  }
-}
+//@AllArgsConstructor
+//@RequestMapping("/user")
+//@RestController
+//public class AppUserController {
+//  private final AppUserService userService;
+//
+//  @PostMapping(path = "/register")
+//  public String registerUser(@RequestBody @Validated AppUser user){
+//    return userService.signupUser(user);
+//  }
+//}
