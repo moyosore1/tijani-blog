@@ -1,8 +1,10 @@
 package com.example.tijani.blog.category;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,29 +21,35 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
 
   private final CategoryService categoryService;
+  private final ModelMapper modelMapper;
 
   @PostMapping
-  public ResponseEntity<Category> saveCategory(@RequestBody @Valid Category category){
-    return new ResponseEntity<Category>(categoryService.saveCategory(category), HttpStatus.CREATED);
+  public ResponseEntity<CategoryDTO> saveCategory(@RequestBody @Valid Category category) {
+    Category newCategory = categoryService.saveCategory(category);
+    CategoryDTO categoryDTO = modelMapper.map(newCategory, CategoryDTO.class);
+    return new ResponseEntity<CategoryDTO>(categoryDTO, HttpStatus.CREATED);
   }
 
   @GetMapping
-  public ResponseEntity<List<Category>> getCategories(){
-    return new ResponseEntity<List<Category>>(categoryService.getAllCategories(), HttpStatus.OK);
+  public ResponseEntity<List<CategoryDTO>> getCategories() {
+    List<CategoryDTO> categoryDTOList = categoryService.getAllCategories().stream()
+        .map(category -> modelMapper.map(category, CategoryDTO.class)).collect(
+            Collectors.toList());
+    return new ResponseEntity<List<CategoryDTO>>(categoryDTOList, HttpStatus.OK);
   }
 
   @GetMapping("/{slug}")
-  public ResponseEntity<Category> getCategory(@PathVariable String slug){
-    return new ResponseEntity<>(categoryService.getCategoryBySlug(slug), HttpStatus.OK);
+  public ResponseEntity<CategoryDTO> getCategory(@PathVariable String slug) {
+    Category category = categoryService.getCategoryBySlug(slug);
+    CategoryDTO categoryDTO = modelMapper.map(category, CategoryDTO.class);
+    return new ResponseEntity<CategoryDTO>(categoryDTO, HttpStatus.OK);
   }
 
   @DeleteMapping("/{categoryId}")
-  public ResponseEntity<HttpStatus> deleteCategory(@PathVariable Integer categoryId){
+  public ResponseEntity<HttpStatus> deleteCategory(@PathVariable Integer categoryId) {
     categoryService.deleteCategory(categoryId);
     return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
   }
-
-
 
 
 }
