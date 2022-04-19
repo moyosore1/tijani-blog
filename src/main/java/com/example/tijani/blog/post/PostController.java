@@ -1,9 +1,11 @@
 package com.example.tijani.blog.post;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
@@ -23,41 +25,53 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
   private final PostService postService;
+  private final ModelMapper modelMapper;
 
   @GetMapping
-  public ResponseEntity<List<Post>> allPosts(@RequestParam int page){
-    return new ResponseEntity<List<Post>>(postService.getAllPosts(page), HttpStatus.OK);
+  public ResponseEntity<List<PostDTO>> allPosts(@RequestParam int page) {
+    List<PostDTO> postDTOList = postService.getAllPosts(page).stream()
+        .map(post -> modelMapper.map(post, PostDTO.class)).collect(
+            Collectors.toList());
+
+    return new ResponseEntity<List<PostDTO>>(postDTOList, HttpStatus.OK);
   }
 
   @PostMapping
-  public ResponseEntity<Post> createPost(@RequestBody @Valid Post post){
-    return new ResponseEntity<Post>(postService.createNewPost(post), HttpStatus.CREATED);
+  public ResponseEntity<PostDTO> createPost(@RequestBody @Valid Post post) {
+    Post newPost = postService.createNewPost(post);
+    PostDTO postDTO = modelMapper.map(newPost, PostDTO.class);
+    return new ResponseEntity<PostDTO>(postDTO, HttpStatus.CREATED);
   }
 
   @PutMapping("/{postId}")
-  public ResponseEntity<Post> updatePost(@RequestBody @Valid Post post, @PathVariable Long postId){
+  public ResponseEntity<PostDTO> updatePost(@RequestBody @Valid Post post,
+      @PathVariable Long postId) {
     post.setId(postId);
-    return new ResponseEntity<Post>(postService.updatePost(post), HttpStatus.OK);
+    Post updatedPost = postService.updatePost(post);
+    PostDTO postDTO = modelMapper.map(updatedPost, PostDTO.class);
+    return new ResponseEntity<PostDTO>(postDTO, HttpStatus.OK);
   }
 
   @DeleteMapping("/{postId}")
-  public ResponseEntity<HttpStatus> deletePost(@PathVariable Long postId){
+  public ResponseEntity<HttpStatus> deletePost(@PathVariable Long postId) {
     postService.deletePost(postId);
     return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
   }
 
   @GetMapping("/{slug}")
-  public ResponseEntity<Post> getPost(@PathVariable String slug){
-    return new ResponseEntity<>(postService.getPostBySlug(slug), HttpStatus.OK);
+  public ResponseEntity<PostDTO> getPost(@PathVariable String slug) {
+    Post post = postService.getPostBySlug(slug);
+    PostDTO postDTO = modelMapper.map(post, PostDTO.class);
+    return new ResponseEntity<PostDTO>(postDTO, HttpStatus.OK);
   }
 
   @GetMapping("/{categoryId}")
-  public ResponseEntity<List<Post>> getPostsInCategory(@PathVariable Integer categoryId, @RequestParam int page){
-    return new ResponseEntity<List<Post>>(postService.getPostsInCategory(categoryId, page), HttpStatus.OK);
+  public ResponseEntity<List<PostDTO>> getPostsInCategory(@PathVariable Integer categoryId,
+      @RequestParam int page) {
+    List<PostDTO> postDTOList = postService.getPostsInCategory(categoryId, page).stream()
+        .map(post -> modelMapper.map(post, PostDTO.class)).collect(
+            Collectors.toList());
+    return new ResponseEntity<List<PostDTO>>(postDTOList, HttpStatus.OK);
   }
-
-
-
-
 
 }

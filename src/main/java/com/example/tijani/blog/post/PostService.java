@@ -57,7 +57,7 @@ public class PostService {
   public Post getPostBySlug(String slug) {
     Optional<Post> post = postRepository.findBySlug(slug);
     if (!post.isPresent()) {
-      System.out.println("Invalid slug");
+      throw new ResourceNotFoundException("Post with slug "+slug+ " does not exist.");
     }
     return post.get();
   }
