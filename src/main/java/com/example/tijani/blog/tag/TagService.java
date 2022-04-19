@@ -30,7 +30,7 @@ public class TagService {
   public Tag getTag(Integer id) {
     Optional<Tag> tag = tagRepository.findById(id);
     if (!tag.isPresent()) {
-      System.out.println("Error 404");
+      throw new ResourceNotFoundException("Tag with id "+id+" does not exist.");
     }
     return tag.get();
   }
