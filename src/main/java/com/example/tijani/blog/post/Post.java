@@ -53,15 +53,14 @@ public class Post {
   @NotBlank(message = "Content is required.")
   private String content;
 
-
+  @CreationTimestamp
   @Column(name = "created_at", updatable = false, nullable = false)
   @Temporal(value = TemporalType.DATE)
-  @CreationTimestamp
   private Date createdAt;
 
+  @UpdateTimestamp
   @Temporal(value = TemporalType.DATE)
   @Column(name = "updated_at")
-  @UpdateTimestamp
   private Date updatedAt;
 
 

@@ -1,5 +1,6 @@
 package com.example.tijani.blog.tag;
 
+import com.example.tijani.blog.exception.ResourceNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ public class TagService {
 
   public void deleteTag(Integer id) {
     if (!tagRepository.existsById(id)) {
-      System.out.println("Error 404!");
+      throw new ResourceNotFoundException("Tag with id "+id+" does not exist.");
     }
     tagRepository.deleteById(id);
   }
