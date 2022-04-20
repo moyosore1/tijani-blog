@@ -1,10 +1,12 @@
-package com.moyosore.socialspring.registration;
+package com.example.tijani.blog.registration;
 
-import com.moyosore.socialspring.registration.token.ConfirmationToken;
-import com.moyosore.socialspring.registration.token.ConfirmationTokenService;
-import com.moyosore.socialspring.user.AppUser;
-import com.moyosore.socialspring.user.UserRole;
-import com.moyosore.socialspring.user.UserService;
+
+
+import com.example.tijani.blog.registration.token.ConfirmationToken;
+import com.example.tijani.blog.registration.token.ConfirmationTokenService;
+import com.example.tijani.blog.user.AppUser;
+import com.example.tijani.blog.user.AppUserService;
+import com.example.tijani.blog.user.UserRole;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class RegistrationService {
   private EmailValidator emailValidator;
-  private final UserService userService;
+  private final AppUserService userService;
 //  private final EmailSender emailSender;
 
 
@@ -32,7 +34,7 @@ public class RegistrationService {
         request.getLastName(),
         request.getEmail(),
         request.getPassword(),
-        UserRole.USER
+        UserRole.ADMIN
     ));
     String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
 //    emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link));

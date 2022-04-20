@@ -1,4 +1,5 @@
-package com.moyosore.socialspring.registration;
+package com.example.tijani.blog.registration;
+
 
 
 import lombok.AllArgsConstructor;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/v1/registration")
+@RequestMapping("/admin/registration")
 @AllArgsConstructor
 public class RegistrationController {
 

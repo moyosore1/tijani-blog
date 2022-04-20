@@ -1,7 +1,8 @@
-package com.moyosore.socialspring.registration.token;
+package com.example.tijani.blog.registration.token;
 
 
-import com.moyosore.socialspring.user.AppUser;
+
+import com.example.tijani.blog.user.AppUser;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;

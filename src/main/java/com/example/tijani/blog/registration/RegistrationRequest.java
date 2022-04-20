@@ -1,4 +1,5 @@
-package com.moyosore.socialspring.registration;
+package com.example.tijani.blog.registration;
+
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

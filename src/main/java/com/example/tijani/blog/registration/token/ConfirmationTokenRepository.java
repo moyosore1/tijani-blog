@@ -1,4 +1,4 @@
-package com.moyosore.socialspring.registration.token;
+package com.example.tijani.blog.registration.token;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
