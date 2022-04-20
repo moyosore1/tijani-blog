@@ -61,8 +61,9 @@ public class AppUser implements UserDetails {
 //  @OneToMany(mappedBy = "appUser")
 //  private List<Post> posts;
 
-  public AppUser(String firstName, String lastName, String email, String password,
+  public AppUser(String username, String firstName, String lastName, String email, String password,
       UserRole userRole) {
+    this.username = username;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;

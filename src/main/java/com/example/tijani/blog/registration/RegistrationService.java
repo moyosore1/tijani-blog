@@ -30,6 +30,7 @@ public class RegistrationService {
     }
 
     String token = userService.signupUser(new AppUser(
+        request.getUsername(),
         request.getFirstName(),
         request.getLastName(),
         request.getEmail(),

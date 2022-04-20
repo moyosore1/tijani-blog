@@ -83,4 +83,9 @@ public class Post {
   @JoinColumn(name = "app_user_id", nullable = false)
   private AppUser author;
 
+  public Post(String title, String content){
+    this.title = title;
+    this.content = content;
+  }
+
 }

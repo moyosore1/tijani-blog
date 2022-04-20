@@ -32,14 +32,15 @@ public class PostService {
     return postRepository.findAll(pages).getContent();
   }
 
-  public Post createNewPost(Post post, Principal currentUser) {
+  public Post createNewPost(PostRequest postRequest, Principal currentUser) {
+    Post post = new Post(postRequest.getTitle(), postRequest.getContent());
     String postSlug = slug.slugify(post.getTitle());
     if (postRepository.findBySlug(postSlug).isPresent()) {
       throw new ApiRequestException("Post with slug already exists. Try using a different title.");
     }
 
     post.setSlug(postSlug);
-    Optional<Category> category = categoryRepository.findById(post.getCategory().getId());
+    Optional<Category> category = categoryRepository.findById(postRequest.getCategory());
     if (!category.isPresent()) {
       throw new ApiRequestException("No such category.");
     }

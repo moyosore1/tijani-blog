@@ -38,8 +38,8 @@ public class PostController {
   }
 
   @PostMapping("/admin/create")
-  public ResponseEntity<PostDTO> createPost(@RequestBody @Valid Post post, Principal currentUser) {
-    Post newPost = postService.createNewPost(post, currentUser);
+  public ResponseEntity<PostDTO> createPost(@RequestBody @Valid PostRequest postRequest, Principal currentUser) {
+    Post newPost = postService.createNewPost(postRequest, currentUser);
     PostDTO postDTO = modelMapper.map(newPost, PostDTO.class);
     return new ResponseEntity<PostDTO>(postDTO, HttpStatus.CREATED);
   }
