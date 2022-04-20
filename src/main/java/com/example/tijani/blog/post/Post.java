@@ -4,6 +4,7 @@ package com.example.tijani.blog.post;
 import com.example.tijani.blog.category.Category;
 import com.example.tijani.blog.comment.Comment;
 import com.example.tijani.blog.tag.Tag;
+import com.example.tijani.blog.user.AppUser;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
@@ -77,5 +78,9 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
   )
   private List<Tag> tags;
+
+  @ManyToOne
+  @JoinColumn(name = "app_user_id", nullable = false)
+  private AppUser author;
 
 }

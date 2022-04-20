@@ -2,8 +2,12 @@ package com.example.tijani.blog.post;
 
 import com.example.tijani.blog.category.Category;
 import com.example.tijani.blog.category.CategoryRepository;
+import com.example.tijani.blog.exception.ApiRequestException;
 import com.example.tijani.blog.exception.ResourceNotFoundException;
+import com.example.tijani.blog.user.AppUser;
+import com.example.tijani.blog.user.AppUserService;
 import com.github.slugify.Slugify;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -18,6 +22,7 @@ public class PostService {
 
   private final PostRepository postRepository;
   private final CategoryRepository categoryRepository;
+  private final AppUserService userService;
   private final Slugify slug;
 
 
@@ -27,23 +32,33 @@ public class PostService {
     return postRepository.findAll(pages).getContent();
   }
 
-  public Post createNewPost(Post post) {
+  public Post createNewPost(Post post, Principal currentUser) {
     String postSlug = slug.slugify(post.getTitle());
     if (postRepository.findBySlug(postSlug).isPresent()) {
-      System.out.println("Post with specified slug exists");
+      throw new ApiRequestException("Post with slug already exists. Try using a different title.");
     }
 
     post.setSlug(postSlug);
     Optional<Category> category = categoryRepository.findById(post.getCategory().getId());
     if (!category.isPresent()) {
-      System.out.println("Wrong category specified!");
+      throw new ApiRequestException("No such category.");
     }
     post.setCategory(category.get());
+    AppUser user = userService.currentUser(currentUser.getName());
+    post.setAuthor(user);
     return postRepository.save(post);
   }
 
-  public Post updatePost(Post post) {
-    return postRepository.save(post);
+  public Post updatePost(Post post, Principal currentUser) {
+    AppUser user = userService.currentUser(currentUser.getName());
+    Post postObj = postRepository.findById(post.getId()).orElseThrow(() -> new ResourceNotFoundException("Post does not exist"));
+    if(postObj.getAuthor() == user){
+      post.setAuthor(user);
+      post.setSlug(postObj.getSlug());
+      return postRepository.save(post);
+    }
+
+    throw new ApiRequestException("Current admin did not create post.");
   }
 
   public void deletePost(Long id) {

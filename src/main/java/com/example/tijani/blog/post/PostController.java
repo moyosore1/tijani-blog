@@ -1,5 +1,6 @@
 package com.example.tijani.blog.post;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
@@ -27,7 +28,7 @@ public class PostController {
   private final PostService postService;
   private final ModelMapper modelMapper;
 
-  @GetMapping
+  @GetMapping("/all")
   public ResponseEntity<List<PostDTO>> allPosts(@RequestParam int page) {
     List<PostDTO> postDTOList = postService.getAllPosts(page).stream()
         .map(post -> modelMapper.map(post, PostDTO.class)).collect(
@@ -36,23 +37,23 @@ public class PostController {
     return new ResponseEntity<List<PostDTO>>(postDTOList, HttpStatus.OK);
   }
 
-  @PostMapping
-  public ResponseEntity<PostDTO> createPost(@RequestBody @Valid Post post) {
-    Post newPost = postService.createNewPost(post);
+  @PostMapping("/admin/create")
+  public ResponseEntity<PostDTO> createPost(@RequestBody @Valid Post post, Principal currentUser) {
+    Post newPost = postService.createNewPost(post, currentUser);
     PostDTO postDTO = modelMapper.map(newPost, PostDTO.class);
     return new ResponseEntity<PostDTO>(postDTO, HttpStatus.CREATED);
   }
 
-  @PutMapping("/{postId}")
+  @PutMapping("/admin/update/{postId}")
   public ResponseEntity<PostDTO> updatePost(@RequestBody @Valid Post post,
-      @PathVariable Long postId) {
+      @PathVariable Long postId, Principal currentUser) {
     post.setId(postId);
-    Post updatedPost = postService.updatePost(post);
+    Post updatedPost = postService.updatePost(post, currentUser);
     PostDTO postDTO = modelMapper.map(updatedPost, PostDTO.class);
     return new ResponseEntity<PostDTO>(postDTO, HttpStatus.OK);
   }
 
-  @DeleteMapping("/{postId}")
+  @DeleteMapping("/admin/delete/{postId}")
   public ResponseEntity<HttpStatus> deletePost(@PathVariable Long postId) {
     postService.deletePost(postId);
     return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
