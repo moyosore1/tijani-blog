@@ -23,14 +23,14 @@ public class CategoryController {
   private final CategoryService categoryService;
   private final ModelMapper modelMapper;
 
-  @PostMapping
+  @PostMapping("/admin/add")
   public ResponseEntity<CategoryDTO> saveCategory(@RequestBody @Valid Category category) {
     Category newCategory = categoryService.saveCategory(category);
     CategoryDTO categoryDTO = modelMapper.map(newCategory, CategoryDTO.class);
     return new ResponseEntity<CategoryDTO>(categoryDTO, HttpStatus.CREATED);
   }
 
-  @GetMapping
+  @GetMapping("/all")
   public ResponseEntity<List<CategoryDTO>> getCategories() {
     List<CategoryDTO> categoryDTOList = categoryService.getAllCategories().stream()
         .map(category -> modelMapper.map(category, CategoryDTO.class)).collect(
@@ -45,7 +45,7 @@ public class CategoryController {
     return new ResponseEntity<CategoryDTO>(categoryDTO, HttpStatus.OK);
   }
 
-  @DeleteMapping("/{categoryId}")
+  @DeleteMapping("/admin/delete/{categoryId}")
   public ResponseEntity<HttpStatus> deleteCategory(@PathVariable Integer categoryId) {
     categoryService.deleteCategory(categoryId);
     return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);

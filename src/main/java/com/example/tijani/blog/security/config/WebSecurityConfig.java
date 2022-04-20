@@ -6,6 +6,7 @@ import com.example.tijani.blog.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import com.example.tijani.blog.jwt.JwtVerifier;
 import com.example.tijani.blog.user.AppUserService;
 
+import com.example.tijani.blog.user.UserRole;
 import javax.crypto.SecretKey;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -49,11 +50,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
+        .authorizeRequests()
+        .antMatchers( "/categories/*", "/comments/*").permitAll()
+        .and()
         .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
         .addFilterAfter(new JwtVerifier(secretKey, jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
+//        .authorizeRequests()
+//        .antMatchers("/", "index",  "/tijani/api/v1/categories").permitAll()
+//        .antMatchers("/api/**").hasRole(UserRole.ADMIN.name())
         .authorizeRequests()
-        .antMatchers("/", "index", "/css/*", "/js/*", "/api/v*/registration", "/api/v*/registration/*").permitAll()
-//        .antMatchers("/api/**").hasRole(STUDENT.name())
         .anyRequest()
         .authenticated();
 
