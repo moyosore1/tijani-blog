@@ -59,12 +59,12 @@ public class PostController {
     return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
   }
 
-  @GetMapping("/{slug}")
-  public ResponseEntity<PostDTO> getPost(@PathVariable String slug) {
-    Post post = postService.getPostBySlug(slug);
-    PostDTO postDTO = modelMapper.map(post, PostDTO.class);
-    return new ResponseEntity<PostDTO>(postDTO, HttpStatus.OK);
-  }
+//  @GetMapping("/{slug}")
+//  public ResponseEntity<PostDTO> getPost(@PathVariable String slug) {
+//    Post post = postService.getPostBySlug(slug);
+//    PostDTO postDTO = modelMapper.map(post, PostDTO.class);
+//    return new ResponseEntity<PostDTO>(postDTO, HttpStatus.OK);
+//  }
 
   @GetMapping("/{categoryId}")
   public ResponseEntity<List<PostDTO>> getPostsInCategory(@PathVariable Integer categoryId,

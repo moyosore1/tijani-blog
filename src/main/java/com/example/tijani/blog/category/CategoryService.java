@@ -1,5 +1,6 @@
 package com.example.tijani.blog.category;
 
+import com.example.tijani.blog.exception.ApiRequestException;
 import com.example.tijani.blog.exception.ResourceNotFoundException;
 import com.github.slugify.Slugify;
 import java.util.List;
@@ -16,7 +17,7 @@ public class CategoryService {
   public Category saveCategory(Category category){
     String categorySlug = slug.slugify(category.getName());
     if(categoryRepository.findBySlug(categorySlug).isPresent()){
-      System.out.println("slug exists");
+      throw new ApiRequestException("Category with slug "+ categorySlug+ " gotten from name provided, already exists.");
     }
     category.setSlug(categorySlug);
     return categoryRepository.save(category);

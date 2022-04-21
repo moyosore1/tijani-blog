@@ -28,7 +28,7 @@ public class PostService {
 
   public List<Post> getAllPosts(int pageNumber) {
     Pageable pages = PageRequest.of(pageNumber, 10, Direction.DESC, "createdAt");
-//    Sort sort = Sort.by(Sort.Direction.ASC)
+
     return postRepository.findAll(pages).getContent();
   }
 
@@ -45,8 +45,6 @@ public class PostService {
       throw new ApiRequestException("No such category.");
     }
     post.setCategory(category.get());
-    System.out.println("MMMMM");
-    System.out.println(currentUser.getName());
     AppUser user = userService.currentUser(currentUser.getName());
     post.setAuthor(user);
     return postRepository.save(post);
