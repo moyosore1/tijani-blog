@@ -3,18 +3,18 @@ package com.example.tijani.blog.jwt;
 
 public class UsernameAndPasswordAuthenticationRequest {
 
-  private String email;
+  private String username;
   private String password;
 
   public UsernameAndPasswordAuthenticationRequest() {
   }
 
-  public String getEmail() {
-    return email;
+  public String getUsername() {
+    return username;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   public String getPassword() {

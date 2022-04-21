@@ -42,13 +42,14 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends
       HttpServletResponse response) throws AuthenticationException {
     //  Grab the username and password sent by client from request object
     try {
+      System.out.println(request);
       UsernameAndPasswordAuthenticationRequest authenticationRequest = new ObjectMapper().readValue(
           request.getInputStream(), UsernameAndPasswordAuthenticationRequest.class);
       // Authentication has in it credentials on going to authentication manager
       // and principal on output from authentication manager.
 
       Authentication authentication = new UsernamePasswordAuthenticationToken(
-          authenticationRequest.getEmail(), authenticationRequest.getPassword());
+          authenticationRequest.getUsername(), authenticationRequest.getPassword());
       Authentication authenticate = authenticationManager.authenticate(authentication);
       return authenticate;
     } catch (IOException e) {

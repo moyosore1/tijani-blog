@@ -50,7 +50,8 @@ public class AppUser implements UserDetails {
 
   @Email
   private String email;
-  @Size(min = 8, max = 25)
+
+  @Size(min = 8, max = 65)
   private String password;
 
   @Enumerated(EnumType.STRING)

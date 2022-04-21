@@ -18,6 +18,6 @@ public class PostRequest {
   private String title;
   @NotBlank(message = "Content shall be required to create post.")
   private String content;
-  @NotBlank(message = "Set category id.")
+
   private int category;
 }

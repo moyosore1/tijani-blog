@@ -67,9 +67,9 @@ public class AppUserService implements UserDetailsService {
     return token;
   }
 
-  public AppUser currentUser(String email) throws UsernameNotFoundException {
-    return userRepository.findByEmail(email)
-        .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+  public AppUser currentUser(String username) throws UsernameNotFoundException {
+    return userRepository.findByUsername(username)
+        .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, username)));
   }
 
   public int enableAppUser(String email) {

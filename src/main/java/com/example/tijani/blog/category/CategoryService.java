@@ -1,5 +1,6 @@
 package com.example.tijani.blog.category;
 
+import com.example.tijani.blog.exception.ResourceNotFoundException;
 import com.github.slugify.Slugify;
 import java.util.List;
 import java.util.Optional;
@@ -26,16 +27,13 @@ public class CategoryService {
   }
 
   public Category getCategoryBySlug(String slug){
-    Optional<Category> category = categoryRepository.findBySlug(slug);
-    if(!category.isPresent()){
-      System.out.println("404 NOT FOUND!");
-    }
-    return category.get();
+    Category category = categoryRepository.findBySlug(slug).orElseThrow(()-> new ResourceNotFoundException("Category with slug "+slug+ " was not found"));
+    return category;
   }
 
   public void deleteCategory(Integer categoryId){
     if(!categoryRepository.existsById(categoryId)){
-      System.out.println("404");
+      throw new ResourceNotFoundException("Category with id "+ categoryId+ " does not exist");
     }
     categoryRepository.deleteById(categoryId);
   }
