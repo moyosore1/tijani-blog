@@ -102,6 +102,7 @@ public class PostService {
         Category category = categoryService.findCategoryById(postRequest.getCategory());
         post.setCategory(category);
       }
+      post = postRepository.save(post);
 
     }
     return post;
