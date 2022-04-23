@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 public class PostService {
 
   private final PostRepository postRepository;
-  private final CategoryRepository categoryRepository;
   private final AppUserService userService;
   private final Slugify slug;
   private final CategoryService categoryService;

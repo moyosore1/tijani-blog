@@ -51,4 +51,11 @@ public class CategoryService {
     return false;
   }
 
+  public Category updateCategory(Category updatedCategory){
+    Category category = categoryRepository.findById(updatedCategory.getId()).orElseThrow(() -> new ResourceNotFoundException("Category with id "+ updatedCategory.getId()+ " does not exist"));
+    if(updatedCategory.getName() != null && !updatedCategory.getName().isEmpty()){
+      category.setName(updatedCategory.getName());
+    }
+    return categoryRepository.save(category);
+  }
 }
