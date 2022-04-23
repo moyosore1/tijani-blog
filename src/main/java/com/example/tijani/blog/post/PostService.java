@@ -79,10 +79,11 @@ public class PostService {
 
   public List<Post> getPostsInCategory(Integer categoryId, int pageNumber) {
     if (!categoryRepository.existsById(categoryId)) {
-      System.out.println("Return 404 here");
+      throw new ResourceNotFoundException("Category with id "+categoryId+ " does not exist.");
+
     }
-//    Pageable pages = PageRequest.of(pageNumber, 10, Direction.DESC, "createdAt");
-    return postRepository.findByCategoryId(categoryId);
+    Pageable pages = PageRequest.of(pageNumber, 10, Direction.DESC, "createdAt");
+    return postRepository.findByCategoryId(categoryId, pages);
   }
 
   public boolean checkIfPostIdExists(Long postId) {

@@ -28,7 +28,7 @@ public class PostController {
   private final PostService postService;
   private final ModelMapper modelMapper;
 
-  @GetMapping("/all")
+  @GetMapping
   public ResponseEntity<List<PostDTO>> allPosts(@RequestParam int page) {
     List<PostDTO> postDTOList = postService.getAllPosts(page).stream()
         .map(post -> modelMapper.map(post, PostDTO.class)).collect(
@@ -37,7 +37,7 @@ public class PostController {
     return new ResponseEntity<List<PostDTO>>(postDTOList, HttpStatus.OK);
   }
 
-  @PostMapping("/admin/create")
+  @PostMapping("/admin/create/new-post")
   public ResponseEntity<PostDTO> createPost(@RequestBody @Valid PostRequest postRequest, Principal currentUser) {
     Post newPost = postService.createNewPost(postRequest, currentUser);
     PostDTO postDTO = modelMapper.map(newPost, PostDTO.class);
@@ -59,14 +59,14 @@ public class PostController {
     return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
   }
 
-//  @GetMapping("/{slug}")
-//  public ResponseEntity<PostDTO> getPost(@PathVariable String slug) {
-//    Post post = postService.getPostBySlug(slug);
-//    PostDTO postDTO = modelMapper.map(post, PostDTO.class);
-//    return new ResponseEntity<PostDTO>(postDTO, HttpStatus.OK);
-//  }
+  @GetMapping("/{slug}")
+  public ResponseEntity<PostDTO> getPost(@PathVariable String slug) {
+    Post post = postService.getPostBySlug(slug);
+    PostDTO postDTO = modelMapper.map(post, PostDTO.class);
+    return new ResponseEntity<PostDTO>(postDTO, HttpStatus.OK);
+  }
 
-  @GetMapping("/{categoryId}")
+  @GetMapping("/category/{categoryId}")
   public ResponseEntity<List<PostDTO>> getPostsInCategory(@PathVariable Integer categoryId,
       @RequestParam int page) {
     List<PostDTO> postDTOList = postService.getPostsInCategory(categoryId, page).stream()
