@@ -45,10 +45,9 @@ public class PostController {
   }
 
   @PutMapping("/admin/update/{postId}")
-  public ResponseEntity<PostDTO> updatePost(@RequestBody @Valid Post post,
+  public ResponseEntity<PostDTO> updatePost(@RequestBody PostRequest postRequest,
       @PathVariable Long postId, Principal currentUser) {
-    post.setId(postId);
-    Post updatedPost = postService.updatePost(post, currentUser);
+    Post updatedPost = postService.updatePost(postRequest, currentUser, postId);
     PostDTO postDTO = modelMapper.map(updatedPost, PostDTO.class);
     return new ResponseEntity<PostDTO>(postDTO, HttpStatus.OK);
   }

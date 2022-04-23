@@ -19,5 +19,5 @@ public class PostRequest {
   @NotBlank(message = "Content shall be required to create post.")
   private String content;
 
-  private int category;
+  private int category = 0;
 }

@@ -2,6 +2,7 @@ package com.example.tijani.blog.post;
 
 import com.example.tijani.blog.category.Category;
 import com.example.tijani.blog.category.CategoryRepository;
+import com.example.tijani.blog.category.CategoryService;
 import com.example.tijani.blog.exception.ApiRequestException;
 import com.example.tijani.blog.exception.ResourceNotFoundException;
 import com.example.tijani.blog.user.AppUser;
@@ -24,6 +25,7 @@ public class PostService {
   private final CategoryRepository categoryRepository;
   private final AppUserService userService;
   private final Slugify slug;
+  private final CategoryService categoryService;
 
 
   public List<Post> getAllPosts(int pageNumber) {
@@ -40,27 +42,13 @@ public class PostService {
     }
 
     post.setSlug(postSlug);
-    Optional<Category> category = categoryRepository.findById(postRequest.getCategory());
-    if (!category.isPresent()) {
-      throw new ApiRequestException("No such category.");
-    }
-    post.setCategory(category.get());
+    Category category = categoryService.findCategoryById(postRequest.getCategory());
+    post.setCategory(category);
     AppUser user = userService.currentUser(currentUser.getName());
     post.setAuthor(user);
     return postRepository.save(post);
   }
 
-  public Post updatePost(Post post, Principal currentUser) {
-    AppUser user = userService.currentUser(currentUser.getName());
-    Post postObj = postRepository.findById(post.getId()).orElseThrow(() -> new ResourceNotFoundException("Post does not exist"));
-    if(postObj.getAuthor() == user){
-      post.setAuthor(user);
-      post.setSlug(postObj.getSlug());
-      return postRepository.save(post);
-    }
-
-    throw new ApiRequestException("Current admin did not create post.");
-  }
 
   public void deletePost(Long id) {
     if (!postRepository.existsById(id)) {
@@ -78,7 +66,7 @@ public class PostService {
   }
 
   public List<Post> getPostsInCategory(Integer categoryId, int pageNumber) {
-    if (!categoryRepository.existsById(categoryId)) {
+    if (!categoryService.checkIfCategoryExists(categoryId)) {
       throw new ResourceNotFoundException("Category with id "+categoryId+ " does not exist.");
 
     }
@@ -97,6 +85,25 @@ public class PostService {
   public Post findPostById(Long postId) {
     Post post = postRepository.findById(postId).orElseThrow(
         () -> new ResourceNotFoundException("Post with id " + postId + " does not exist"));
+    return post;
+  }
+
+  public Post updatePost(PostRequest postRequest, Principal user, Long postId){
+    Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post with id " + postId + " does not exist"));
+    AppUser currentUser = userService.currentUser(user.getName());
+    if(post.getAuthor() == currentUser){
+      if(postRequest.getTitle() != null && !post.getTitle().isEmpty()){
+        post.setTitle(postRequest.getTitle());
+      }
+      if(postRequest.getContent() != null && !post.getContent().isEmpty()){
+        post.setContent(postRequest.getContent());
+      }
+      if(postRequest.getCategory() != 0){
+        Category category = categoryService.findCategoryById(postRequest.getCategory());
+        post.setCategory(category);
+      }
+
+    }
     return post;
   }
 

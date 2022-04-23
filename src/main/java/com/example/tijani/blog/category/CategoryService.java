@@ -39,5 +39,16 @@ public class CategoryService {
     categoryRepository.deleteById(categoryId);
   }
 
+  public Category findCategoryById(Integer categoryId){
+    Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category with id "+ categoryId+ " does not exist"));
+    return category;
+  }
+
+  public boolean checkIfCategoryExists(Integer categoryId){
+    if(categoryRepository.existsById(categoryId)){
+      return true;
+    }
+    return false;
+  }
 
 }
