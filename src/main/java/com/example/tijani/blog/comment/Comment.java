@@ -16,7 +16,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,7 +24,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class Comment {
@@ -43,9 +41,16 @@ public class Comment {
   @Size(min = 3, max = 25, message = "Name should have between 3 and 25 characters.")
   private String name;
 
+  @Column(columnDefinition = "TEXT")
+  @NotBlank(message = "Content is required.")
+  private String content;
+
+
   @ManyToOne
   @JoinColumn(name = "post_id", nullable = false)
   private Post post;
+
+
 
   @Column(name = "created_at", updatable = false, nullable = false)
   @Temporal(value = TemporalType.DATE)
@@ -53,5 +58,9 @@ public class Comment {
   private Date createdAt;
 
 
+  public Comment(String name, String content) {
+    this.name = name;
+    this.content = content;
+  }
 }
 

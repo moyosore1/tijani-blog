@@ -24,18 +24,18 @@ public class CommentController {
   private final ModelMapper modelMapper;
 
   @GetMapping("/{postId}")
-  public ResponseEntity<List<CommentDTO>> getPostComments(@PathVariable("postId") Long postId) {
-    List<CommentDTO> commentDTOList = commentService.getCommentsForPost(postId).stream()
-        .map(comment -> modelMapper.map(comment, CommentDTO.class)).collect(
+  public ResponseEntity<List<CommentListDTO>> getPostComments(@PathVariable("postId") Long postId) {
+    List<CommentListDTO> commentDTOList = commentService.getCommentsForPost(postId).stream()
+        .map(comment -> modelMapper.map(comment, CommentListDTO.class)).collect(
             Collectors.toList());
-    return new ResponseEntity<List<CommentDTO>>(commentDTOList,
+    return new ResponseEntity<List<CommentListDTO>>(commentDTOList,
         HttpStatus.OK);
   }
 
   @PostMapping("/{postId}")
-  public ResponseEntity<CommentDTO> saveComment(@RequestBody @Valid Comment comment,
+  public ResponseEntity<CommentDTO> saveComment(@RequestBody @Valid CommentRequest commentRequest,
       @PathVariable("postId") Long postId) {
-    Comment newComment = commentService.saveComment(comment, postId);
+    Comment newComment = commentService.saveComment(commentRequest, postId);
     CommentDTO commentDTO = modelMapper.map(newComment, CommentDTO.class);
     return new ResponseEntity<CommentDTO>(commentDTO,
         HttpStatus.CREATED);

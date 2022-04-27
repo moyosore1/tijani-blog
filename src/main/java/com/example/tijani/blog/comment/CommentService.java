@@ -23,8 +23,9 @@ public class CommentService {
     }
   }
 
-  public Comment saveComment(Comment comment, Long postId){
+  public Comment saveComment(CommentRequest commentRequest, Long postId){
     Post post = postService.findPostById(postId);
+    Comment comment = new Comment(commentRequest.getName(), commentRequest.getContent());
     comment.setPost(post);
     return commentRepository.save(comment);
   }
